@@ -1,4 +1,5 @@
-# Keyloggers can be a serious privacy concern and are illegal if used without explicit consent. Ensure you use such scripts only in legal and ethical scenarios.
+# Keyloggers can be a serious privacy concern and are illegal if used without explicit consent. 
+# Ensure you use such scripts only in legal and ethical scenarios.
 
 
 from pynput import keyboard
